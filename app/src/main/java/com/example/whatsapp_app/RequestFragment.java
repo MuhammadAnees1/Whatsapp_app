@@ -31,8 +31,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class RequestFragment extends Fragment {
-    private View RequestFragmentView;
-    private RecyclerView myRequestList;
+    private View ShowingRequestFragmentView;
+    private RecyclerView myRequestList3;
     private DatabaseReference chatRequestRef, getTypeRef,userRef,contactsRef;
     private FirebaseAuth mAuth;
 
@@ -41,16 +41,16 @@ public class RequestFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        RequestFragmentView = inflater.inflate(R.layout.fragment_contact, container, false);
-        myRequestList = RequestFragmentView.findViewById(R.id.chat_request_list3);
-        myRequestList.setLayoutManager(new LinearLayoutManager(getContext()));
+        ShowingRequestFragmentView = inflater.inflate(R.layout.fragment_request, container, false);
+        myRequestList3 =   ShowingRequestFragmentView.findViewById(R.id.chat_request_list3);
+        myRequestList3.setLayoutManager(new LinearLayoutManager(getContext()));
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         chatRequestRef = FirebaseDatabase.getInstance().getReference().child("Chat Request");
         chatRequestRef = FirebaseDatabase.getInstance().getReference().child("User");
         chatRequestRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
 
-        return RequestFragmentView;
+        return   ShowingRequestFragmentView;
     }
 
 
@@ -202,7 +202,7 @@ public class RequestFragment extends Fragment {
             }
         };
 
-        myRequestList.setAdapter(adapter);
+        myRequestList3.setAdapter(adapter);
         adapter.startListening();
     }
 
