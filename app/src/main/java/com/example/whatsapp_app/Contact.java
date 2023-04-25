@@ -1,12 +1,18 @@
 package com.example.whatsapp_app;
 
 public class Contact {
+    public String name, status, image;
 
-    public Contact(){
-
+    public Contact()
+    {
 
     }
-    public  String name , status , image;
+
+    public Contact(String name, String status, String image) {
+        this.name = name;
+        this.status = status;
+        this.image = image;
+    }
 
     public String getName() {
         return name;
@@ -29,12 +35,6 @@ public class Contact {
     }
 
     public void setImage(String image) {
-        this.image = image;
-    }
-
-    public Contact(String name, String status, String image) {
-        this.name = name;
-        this.status = status;
         this.image = image;
     }
 }

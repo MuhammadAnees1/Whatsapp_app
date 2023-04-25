@@ -22,4 +22,5 @@
     <string name="find_friend">Find Friend</string>
     <string name="create_group">Create Group</string>
     <string name="request">Request</string>
+    <string name="not">no</string>
 </resources>

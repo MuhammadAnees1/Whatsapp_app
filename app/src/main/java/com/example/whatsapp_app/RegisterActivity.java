@@ -18,15 +18,19 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-public class RegisterActivity extends AppCompatActivity {
 
+public class RegisterActivity extends AppCompatActivity
+{
     private Button CreateAccountButton;
     private EditText UserEmail, UserPassword;
     private TextView AlreadyHaveAccountLink;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference RootReference;
+    private DatabaseReference RootRef;
+
+
 
 
     @Override
@@ -35,78 +39,105 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+
         mAuth = FirebaseAuth.getInstance();
 
-        RootReference = FirebaseDatabase.getInstance().getReference();
+        RootRef = FirebaseDatabase.getInstance().getReference();
+
+
         InitializeFields();
 
 
-        AlreadyHaveAccountLink.setOnClickListener(new View.OnClickListener() {
+        AlreadyHaveAccountLink.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                Intent loginActivity = new Intent(RegisterActivity.this,LoginActivity.class);
-                startActivity (loginActivity);
+            public void onClick(View view)
+            {
+                SendUserToLoginActivity();
             }
         });
 
+
         CreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
+            public void onClick(View view)
             {
                 CreateNewAccount();
             }
         });
-
     }
+
+
+
 
     private void CreateNewAccount()
     {
-    String email = UserEmail.getText().toString();
+        String email = UserEmail.getText().toString();
         String password = UserPassword.getText().toString();
 
-    if(TextUtils.isEmpty(email)){
-        Toast.makeText(this, "please Enter the email",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email))
+        {
+            Toast.makeText(this, "Please enter email...", Toast.LENGTH_SHORT).show();
+        }
+        if (TextUtils.isEmpty(password))
+        {
+            Toast.makeText(this, "Please enter password...", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+
+
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task)
+                        {
+                            if (task.isSuccessful())
+                            {
+                                String currentUserID = mAuth.getCurrentUser().getUid();
+                                String deviceToken = String.valueOf(FirebaseMessaging.getInstance().getToken());
+                                RootRef.child("User").child(currentUserID).setValue("");
+                                RootRef.child("User").child(currentUserID).child("device_token").setValue(deviceToken);
+                                SendUserToMainActivity();
+                                Toast.makeText(RegisterActivity.this, "Account Created Successfully...", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                String message = task.getException().toString();
+                                Toast.makeText(RegisterActivity.this, "Error : " + message, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 
-     else if(TextUtils.isEmpty(password)){
-            Toast.makeText(this, "please Enter the password",Toast.LENGTH_SHORT).show();
-        }
-    else {
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        if (task.isSuccessful()){
 
-                            String currentUserId  =mAuth.getCurrentUser().getUid();
-                            RootReference.child("User").child(currentUserId).setValue("");
+    private void InitializeFields()
+    {
+        CreateAccountButton = findViewById(R.id.register_button);
+        UserEmail = findViewById(R.id.register_email);
+        UserPassword = findViewById(R.id.register_password);
+        AlreadyHaveAccountLink = findViewById(R.id.already_have_account_link);
 
-                            sendUserToMainActivity();
-                            Toast.makeText(RegisterActivity.this, "Account Created successfully...",Toast.LENGTH_SHORT).show();
-                        }
-                        else {
 
-                            String errorMessage = task.getException().getMessage();
-                            Toast.makeText(RegisterActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-        }
     }
-    private void sendUserToMainActivity() {
-        Intent mainIntent = new Intent(RegisterActivity.this,MainActivity.class);
+
+
+    private void SendUserToLoginActivity()
+    {
+        Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(loginIntent);
+    }
+
+
+    private void SendUserToMainActivity()
+    {
+        Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();
     }
 
-    private void InitializeFields() {
-        CreateAccountButton = findViewById(R.id.register_button);
-        UserEmail =findViewById(R.id.register_email);
-        UserPassword = findViewById(R.id.register_password);
-        AlreadyHaveAccountLink = findViewById(R.id.already_have_account_link);
-
-    }
 }

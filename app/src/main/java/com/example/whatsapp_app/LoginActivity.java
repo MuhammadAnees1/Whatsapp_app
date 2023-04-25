@@ -11,83 +11,158 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-public class LoginActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-    private Button login_button , PhoneLoginButton;
-    private EditText login_password ,login_email;
-    private TextView NeedNewAccountLink, ForgetPasswordLink;
+import io.reactivex.rxjava3.annotations.NonNull;
+
+public class LoginActivity extends AppCompatActivity
+{
     private FirebaseAuth mAuth;
+
+    private Button LoginButton, PhoneLoginButton;
+    private EditText UserEmail, UserPassword;
+    private TextView NeedNewAccountLink, ForgetPasswordLink;
+
+    private DatabaseReference UsersRef;
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        InitializeFields();
-
         mAuth = FirebaseAuth.getInstance();
+        UsersRef = FirebaseDatabase.getInstance().getReference().child("User");
+
+
+        InitializeFields();
 
 
         NeedNewAccountLink.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent registerActivity = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity (registerActivity);
+            public void onClick(View view)
+            {
+                SendUserToRegisterActivity();
             }
         });
-      login_button.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              AllowUserToLogin();
-          }
-      });
 
-      PhoneLoginButton.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              Intent intent = new Intent(LoginActivity.this,PhoneLoginActivity.class);
-              startActivity(intent);
-          }
-      });
 
+        LoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                AllowUserToLogin();
+            }
+        });
+
+        PhoneLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent phoneLoginIntent = new Intent(LoginActivity.this, PhoneLoginActivity.class);
+                startActivity(phoneLoginIntent);
+            }
+        });
     }
-    private void AllowUserToLogin() {
-        String Email = login_email.getText().toString();
-        String password = login_password.getText().toString();
 
-        if (TextUtils.isEmpty(Email)) {
-            Toast.makeText(this, "please Enter the email", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "please Enter the password", Toast.LENGTH_SHORT).show();
-        } else {
-            mAuth.signInWithEmailAndPassword(Email, password)
-                    .addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Login successful!!",
-                                    Toast.LENGTH_SHORT).show();
-                            sendUserToMainActivity();
 
-                        } else {
-                            String errorMessage = task.getException().getMessage();
-                            Toast.makeText(LoginActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
 
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null)
+        {
+            SendUserToMainActivity();
+        }
+    }
+
+
+
+    private void AllowUserToLogin()
+    {
+        String email = UserEmail.getText().toString();
+        String password = UserPassword.getText().toString();
+
+        if (TextUtils.isEmpty(email))
+        {
+            Toast.makeText(this, "Please enter email...", Toast.LENGTH_SHORT).show();
+        }
+        if (TextUtils.isEmpty(password))
+        {
+            Toast.makeText(this, "Please enter password...", Toast.LENGTH_SHORT).show();
+        }
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task)
+                        {
+                            if (task.isSuccessful())
+                            {
+                                String currentUserId = mAuth.getCurrentUser().getUid();
+                                String deviceToken = String.valueOf(FirebaseMessaging.getInstance().getToken());
+                                UsersRef.child(currentUserId).child("device_token")
+                                        .setValue(deviceToken)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task)
+                                            {
+                                                if (task.isSuccessful())
+                                                {
+                                                    SendUserToMainActivity();
+                                                    Toast.makeText(LoginActivity.this, "Logged in Successful...", Toast.LENGTH_SHORT).show();
+
+                                                }
+                                            }
+                                        });
+                            }
+                            else
+                            {
+                                String message = task.getException().toString();
+                                Toast.makeText(LoginActivity.this, "Error : " + message, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
         }
-    }
+
+
+
+
     private void InitializeFields()
     {
-        login_button = findViewById(R.id.login_button);
+        LoginButton = findViewById(R.id.login_button);
         PhoneLoginButton = findViewById(R.id.phone_login_button);
-        login_email =findViewById(R.id.login_email);
-        login_password = findViewById(R.id.login_password);
+        UserEmail = findViewById(R.id.login_email);
+        UserPassword = findViewById(R.id.login_password);
         NeedNewAccountLink = findViewById(R.id.need_new_account_link);
         ForgetPasswordLink = findViewById(R.id.forget_password_link);
+
     }
-    private void sendUserToMainActivity() {
-        Intent mainIntent = new Intent(LoginActivity.this,MainActivity.class);
+
+
+
+    private void SendUserToMainActivity()
+    {
+        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();
+    }
+
+    private void SendUserToRegisterActivity()
+    {
+        Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(registerIntent);
     }
 }
