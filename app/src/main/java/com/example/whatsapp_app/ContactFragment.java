@@ -52,16 +52,10 @@ public class ContactFragment extends Fragment
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
-
-
         ContactRef = FirebaseDatabase.getInstance().getReference().child("Contacts").child(currentUserID);
         UsersRef = FirebaseDatabase.getInstance().getReference().child("User");
-
-
         return ContactsView;
     }
-
-
     @Override
     public void onStart()
     {
@@ -105,8 +99,6 @@ public class ContactFragment extends Fragment
                             {
                                 holder.onlineIcon.setVisibility(View.INVISIBLE);
                             }
-
-
                             if (dataSnapshot.hasChild("image"))
                             {
                                 String userImage = dataSnapshot.child("image").getValue().toString();

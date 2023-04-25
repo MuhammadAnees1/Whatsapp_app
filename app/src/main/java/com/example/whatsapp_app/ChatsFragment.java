@@ -92,11 +92,10 @@ public class ChatsFragment extends Fragment
                                         retImage[0] = dataSnapshot.child("image").getValue().toString();
                                         Picasso.get().load(retImage[0]).into(holder.profileImage);
                                     }
+                                    String retName = dataSnapshot.child("name").getValue().toString();
+//                                  final  String retStatus = dataSnapshot.child("status").getValue().toString();
 
-//                                 final    String retName = dataSnapshot.child("name").getValue().toString();
-//                                 final    String retStatus = dataSnapshot.child("status").getValue().toString();
-
-//                                    holder.userName.setText(retName);
+                                    holder.userName.setText(retName);
 
 
                                     if (dataSnapshot.child("userState").hasChild("state"))
@@ -125,7 +124,7 @@ public class ChatsFragment extends Fragment
                                         {
                                             Intent chatIntent = new Intent(getContext(), ChatActivity.class);
                                             chatIntent.putExtra("visit_user_id", usersIDs);
-//                                            chatIntent.putExtra("visit_user_name", retName);
+                                            chatIntent.putExtra("visit_user_name", retName);
                                             chatIntent.putExtra("visit_image", retImage[0]);
                                             startActivity(chatIntent);
                                         }
@@ -153,14 +152,10 @@ public class ChatsFragment extends Fragment
         adapter.startListening();
     }
 
-
-
-
     public static class  ChatsViewHolder extends RecyclerView.ViewHolder
     {
         CircleImageView profileImage;
         TextView userStatus, userName;
-
 
         public ChatsViewHolder(@NonNull View itemView)
         {
