@@ -34,14 +34,9 @@ public class FindFriendsActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_friends2);
-
-
         UsersRef = FirebaseDatabase.getInstance().getReference().child("User");
-
-
         FindFriendsRecyclerList =findViewById(R.id.find_friend_recycler_list);
         FindFriendsRecyclerList.setLayoutManager(new LinearLayoutManager(this));
-
 
         mToolbar = findViewById(R.id.find_friend_toolbar);
         setSupportActionBar(mToolbar);
@@ -95,7 +90,6 @@ public class FindFriendsActivity extends AppCompatActivity
                 };
 
         FindFriendsRecyclerList.setAdapter(adapter);
-
         adapter.startListening();
     }
 

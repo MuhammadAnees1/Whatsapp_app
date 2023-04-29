@@ -114,12 +114,22 @@ public class GroupChatActivity extends AppCompatActivity {
     private void InitializeFields() {
         mToolbar =findViewById(R.id.group_chat_bar_layout);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(currentGroupName);
         displayTextMessage = findViewById(R.id.group_chat_text_display);
         mScrollView = findViewById(R.id.my_scroll_view);
         userMessageInput = findViewById(R.id.input_group_message);
         SendMessageButton = findViewById(R.id.send_massage_button);
+
+// for back button
+
+        mToolbar =findViewById(R.id.group_chat_bar_layout);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setTitle (currentGroupName);
+
     }
+
+//    for getting user details to firebase
     private void GetUserInfo() {
 
         UserRef.child(currentUserID).addValueEventListener(new ValueEventListener() {

@@ -93,7 +93,7 @@ public class ChatsFragment extends Fragment
                                         Picasso.get().load(retImage[0]).into(holder.profileImage);
                                     }
                                     String retName = dataSnapshot.child("name").getValue().toString();
-//                                  final  String retStatus = dataSnapshot.child("status").getValue().toString();
+//                                   final  String retStatus = dataSnapshot.child("status").getValue().toString();
 
                                     holder.userName.setText(retName);
 

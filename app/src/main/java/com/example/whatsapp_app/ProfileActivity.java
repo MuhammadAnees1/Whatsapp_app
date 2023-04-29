@@ -30,6 +30,7 @@ public class ProfileActivity extends AppCompatActivity
     private TextView userProfileName, userProfileStatus;
     private Button SendMessageRequestButton, DeclineMessageRequestButton;
 
+
     private DatabaseReference UserRef, ChatRequestRef, ContactsRef, NotificationRef;
     private FirebaseAuth mAuth;
 
@@ -61,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity
 
 
         RetrieveUserInfo();
+
     }
 
 
@@ -80,6 +82,7 @@ public class ProfileActivity extends AppCompatActivity
                     Picasso.get().load(userImage).placeholder(R.drawable.profile_image).into(userProfileImage);
                     userProfileName.setText(userName);
                     userProfileStatus.setText(userstatus);
+
 
 
                     ManageChatRequests();

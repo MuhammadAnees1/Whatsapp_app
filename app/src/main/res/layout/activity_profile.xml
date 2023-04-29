@@ -13,8 +13,7 @@
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="110dp"
-        android:src="@drawable/profile_image"/>
+        android:layout_marginTop="110dp"/>
 
 
     <TextView
@@ -76,4 +75,7 @@
         android:text="Cancel Chat Request"
         android:textAllCaps="false"
         android:visibility="invisible"/>
+
+
+
 </RelativeLayout>
