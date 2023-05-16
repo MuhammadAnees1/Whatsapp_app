@@ -50,13 +50,13 @@
             android:id="@+id/input_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Message"
+            android:hint="@string/message_hint_text"
             android:inputType="text"
             android:padding="15dp"
             android:maxLines="5"
             android:layout_toEndOf="@+id/send_files_btn"
             android:layout_toStartOf="@+id/send_message_btn"
-            tools:ignore="VisualLintTextFieldSize" />
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
 
         <ImageButton
@@ -65,8 +65,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:backgroundTint="@android:color/white"
+            android:contentDescription="@string/send_message_button"
             android:src="@drawable/send_message"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,RedundantDescriptionCheck" />
 
     </RelativeLayout>
 

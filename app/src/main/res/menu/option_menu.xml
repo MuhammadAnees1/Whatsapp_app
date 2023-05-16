@@ -8,7 +8,6 @@
         android:id="@+id/main_find_friend_option"/>
     <item
         android:title="@string/create_group"
-
         android:id="@+id/main_create_groups_option"/>
 
     <item

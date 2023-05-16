@@ -27,9 +27,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
 import java.util.HashMap;
 import de.hdodenhof.circleimageview.CircleImageView;
+
 public class SettingsActivity extends AppCompatActivity
 {
     private Button UpdateAccountSettings;
@@ -51,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity
         RootRef = FirebaseDatabase.getInstance().getReference();
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
         InitializeFields();
-        userName.setVisibility(View.INVISIBLE);
+//        userName.setVisibility(View.INVISIBLE);
         UpdateAccountSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -76,8 +76,6 @@ public class SettingsActivity extends AppCompatActivity
                     Intent settingActivity = new Intent(SettingsActivity.this, SettingsActivity.class);
                     startActivity(settingActivity);
                 }
-
-
                 if (uri !=null) {
 
                     StorageReference filePath = UserProfileImagesRef.child(currentUserID + ".jpg");
@@ -92,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         final String downloadUrl = uri.toString();
-                                        // your code to save the downloadUrl to the database
+                                        // Code is save to the downloadUrl to the database
 
                                         RootRef.child("User").child(currentUserID).child("image")
                                                 .setValue(downloadUrl)

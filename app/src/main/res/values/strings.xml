@@ -23,4 +23,11 @@
     <string name="create_group">Create Group</string>
     <string name="request">Request</string>
     <string name="not">no</string>
+    <string name="user_name_profile">user name</string>
+    <string name="states_profile">hey I\'m using whatsapp</string>
+    <string name="send_message_botton">Send message</string>
+    <string name="cancel_chat_request_button">Cancel Chat Request</string>
+    <string name="message_hint_text">Message</string>
+    <string name="send_message_button">send message button</string>
+    <string name="chatbutton">groupchatbutton</string>
 </resources>

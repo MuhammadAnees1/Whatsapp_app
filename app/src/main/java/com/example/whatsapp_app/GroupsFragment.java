@@ -8,88 +8,76 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class GroupsFragment extends Fragment {
-
     private View groupFragmentView;
     private ListView list_view;
-    private DatabaseReference groupRef;
-
     private ArrayAdapter<String> arrayAdapter;
-
-    private ArrayList<String> list_of_groups= new ArrayList<>();
-
-
-    public GroupsFragment() {
-    }
+    ArrayList<String> list_of_groups = new ArrayList<>();
+    private DatabaseReference GroupRef;
+//    private String currentUserID;
+//    private FirebaseAuth mAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
 
+    {
+//        mAuth = FirebaseAuth.getInstance();
+//        currentUserID = mAuth.getCurrentUser().getUid();
         groupFragmentView = inflater.inflate(R.layout.fragment_groups, container, false);
+        GroupRef = FirebaseDatabase.getInstance().getReference().child("Groups");
 
-        list_view = groupFragmentView.findViewById(R.id.list_view);
-//        list_view.setLayoutManager(new LinearLayoutManager(getContext()));
-        groupRef = FirebaseDatabase.getInstance().getReference().child("Groups");
-
-        IntializeField();
+        IntializeFields();
 
         RetrieveAndDisplayGroups();
 
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String currentGroupName = parent.getItemAtPosition(position).toString();
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id){
+                String currentGroupName = adapterView.getItemAtPosition(position).toString();
                 Intent groupChatIntent = new Intent(getContext(), GroupChatActivity.class);
-                groupChatIntent.putExtra("groupName", currentGroupName);
+                groupChatIntent.putExtra("groupName" , currentGroupName);
                 startActivity(groupChatIntent);
             }
         });
-
         return groupFragmentView;
     }
-
-
-
-    private void IntializeField() {
-        list_view = groupFragmentView.findViewById(R.id.list_view);
+    private void IntializeFields()
+    {
+        list_view =groupFragmentView.findViewById(R.id.list_view);
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list_of_groups);
         list_view.setAdapter(arrayAdapter);
     }
 
-    private void RetrieveAndDisplayGroups() {
-        groupRef.addValueEventListener(new ValueEventListener() {
+    private void RetrieveAndDisplayGroups()
+    {
+        GroupRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 Set<String> set = new HashSet<>();
 
-                Iterator iterator = snapshot.getChildren().iterator();
-
-                while (iterator.hasNext()){
-                    set.add(((DataSnapshot)iterator.next()).getKey());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    set.add(snapshot.getKey());
                 }
+
                 list_of_groups.clear();
                 list_of_groups.addAll(set);
                 arrayAdapter.notifyDataSetChanged();
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

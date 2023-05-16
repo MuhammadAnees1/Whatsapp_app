@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,10 +16,10 @@
 
 
     <TextView
-        android:id="@+id/visit_profile_name"
+        android:id="@+id/visit_profile_name3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="user name"
+        android:text="@string/user_name_profile"
         android:layout_below="@+id/visit_profile_image"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
@@ -34,8 +33,8 @@
         android:id="@+id/visit_profile_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="hey I'm using whatsapp"
-        android:layout_below="@+id/visit_profile_name"
+        android:text="@string/states_profile"
+        android:layout_below="@+id/visit_profile_name3"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="25dp"
@@ -45,7 +44,7 @@
         android:textSize="25sp"/>
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/send_massage_request_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,10 +56,11 @@
         android:background="@drawable/button"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:text="Send message"
-        android:textAllCaps="false"/>
+        android:text="@string/send_message_botton"
+        android:textAllCaps="false"
+        tools:ignore="VisualLintButtonSize" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/decline_massage_request_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,9 +72,10 @@
         android:background="@drawable/button"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:text="Cancel Chat Request"
+        android:text="@string/cancel_chat_request_button"
         android:textAllCaps="false"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        tools:ignore="VisualLintButtonSize" />
 
 
 

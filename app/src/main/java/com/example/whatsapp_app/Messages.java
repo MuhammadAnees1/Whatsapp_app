@@ -3,12 +3,9 @@ package com.example.whatsapp_app;
 public class Messages
 {
     private String from, message, type, to, messageID, time, date, name;
-
     public Messages()
     {
-
     }
-
     public Messages(String from, String message, String type, String to, String messageID, String time, String date, String name) {
         this.from = from;
         this.message = message;
