@@ -1,4 +1,5 @@
 package com.example.whatsapp_app;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+
 public class GroupChatActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private ImageButton SendMessageButton;
@@ -147,29 +149,27 @@ public class GroupChatActivity extends AppCompatActivity {
     }
 //    group massage
 private void DisplayMessage(DataSnapshot snapshot) {
-    Iterator iterator = snapshot.getChildren().iterator();
+
+        Iterator iterator = snapshot.getChildren().iterator();
+
     while (iterator.hasNext()) {
         DataSnapshot childSnapshot = (DataSnapshot) iterator.next();
         Object value = childSnapshot.getValue();
-
         if (value instanceof HashMap) {
             HashMap<String, String> chatDataMap = (HashMap<String, String>) value;
-
             String chatData = chatDataMap.get("chatData");
             String chatMessage = chatDataMap.get("chatMessage");
             String chatName = chatDataMap.get("chatName");
             String chatTime = chatDataMap.get("chatTime");
-
             displayTextMessage.append(chatName + ":\n" + chatMessage + ":\n" + chatTime + "   " + chatData + ":\n\n\n");
-        } else if (value instanceof String) {
+        }
+        else if (value instanceof String) {
             String chatData = (String) value;
             // Handle the case when the value is a string directly without a HashMap structure
             // You might want to adjust this part based on your specific data structure
-
             displayTextMessage.append(chatData + "\n");
         }
-
         mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
     }
-}
+    }
 }

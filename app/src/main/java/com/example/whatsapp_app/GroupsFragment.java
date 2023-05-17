@@ -58,7 +58,6 @@ public class GroupsFragment extends Fragment {
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list_of_groups);
         list_view.setAdapter(arrayAdapter);
     }
-
     private void RetrieveAndDisplayGroups()
     {
         GroupRef.addValueEventListener(new ValueEventListener() {
@@ -66,11 +65,9 @@ public class GroupsFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 Set<String> set = new HashSet<>();
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     set.add(snapshot.getKey());
                 }
-
                 list_of_groups.clear();
                 list_of_groups.addAll(set);
                 arrayAdapter.notifyDataSetChanged();

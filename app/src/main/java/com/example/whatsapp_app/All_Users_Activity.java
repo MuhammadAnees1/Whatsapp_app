@@ -46,9 +46,7 @@ public class All_Users_Activity extends AppCompatActivity {
       GroupRef = FirebaseDatabase.getInstance().getReference().child("Groups").child(groupName);
 
         usersList = findViewById(R.id.private_list_of_users);
-
         usersList.setLayoutManager(new LinearLayoutManager(this));
-
         mToolbar = findViewById(R.id.Add_User_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -69,12 +67,11 @@ public class All_Users_Activity extends AppCompatActivity {
                         .setQuery(UsersRef, Contact.class)
                         .build();
 
-        FirebaseRecyclerAdapter<Contact, UsersViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Contact, UsersViewHolder>(options) {
+        FirebaseRecyclerAdapter<Contact,UsersViewHolder> adapter =
+                new FirebaseRecyclerAdapter<Contact,UsersViewHolder>(options) {
                     @Override
                     protected void onBindViewHolder(@NonNull final UsersViewHolder holder, int position, @NonNull final Contact model) {
                         final String listUserId = getRef(position).getKey();
-
                         UsersRef.child(listUserId).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -87,7 +84,6 @@ public class All_Users_Activity extends AppCompatActivity {
                                     holder.userStatus.setText(userStatus);
                                     Picasso.get().load(userProfileImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
                                 }
-
                                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -108,14 +104,12 @@ public class All_Users_Activity extends AppCompatActivity {
                                     }
                                 });
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                 // Handle database error
                             }
                         });
                     }
-
                     @NonNull
                     @Override
                     public UsersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

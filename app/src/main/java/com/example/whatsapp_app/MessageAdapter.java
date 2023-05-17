@@ -264,18 +264,21 @@ import io.reactivex.rxjava3.annotations.NonNull;
     }
             private void deleteMessageFormEveryone(final int position, final MessageViewHolder holder) {
                 DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                Messages message = userMessagesList.get(holder.getBindingAdapterPosition());
+
                 rootRef.child("Messages")
-                        .child(userMessagesList.get(position).getTo())
-                        .child(userMessagesList.get(position).getFrom())
-                        .child(userMessagesList.get(position).getMessageID())
-                        .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .child(message.getTo())
+                        .child(message.getFrom())
+                        .child(message.getMessageID())
+                        .removeValue()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
-                            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                            public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     rootRef.child("Messages")
-                                            .child(userMessagesList.get(position).getFrom())
-                                            .child(userMessagesList.get(position).getTo())
-                                            .child(userMessagesList.get(position).getMessageID())
+                                            .child(message.getFrom())
+                                            .child(message.getTo())
+                                            .child(message.getMessageID())
                                             .removeValue()
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override

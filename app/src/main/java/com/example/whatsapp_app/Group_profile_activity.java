@@ -46,22 +46,22 @@ public class Group_profile_activity extends AppCompatActivity {
 
             addGroupMember =findViewById(R.id.add_group_member);
             UpdateGroupSettings =findViewById(R.id.update_Group_button);
-        GroupProfileToolBar = findViewById(R.id.group_settings_toolbar);
+            GroupProfileToolBar = findViewById(R.id.group_settings_toolbar);
             GroupName =findViewById(R.id.set_Group_name);
             groupDiscription =findViewById(R.id.set_group_discription);
             groupProfileImage =findViewById(R.id.group_profile_image);
         currentGroupName = getIntent().getExtras().get("groupName").toString();
-        Toast.makeText(Group_profile_activity.this, currentGroupName, Toast.LENGTH_SHORT).show();
+                Toast.makeText(Group_profile_activity.this, currentGroupName, Toast.LENGTH_SHORT).show();
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         RootRef = FirebaseDatabase.getInstance().getReference().child("Groups").child(currentGroupName);
         GroupProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Group Profile Images");
-        setSupportActionBar(GroupProfileToolBar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setTitle("Group Settings");
+            setSupportActionBar(GroupProfileToolBar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setTitle("Group Settings");
 
-        addGroupMember.setOnClickListener(new View.OnClickListener() {
+            addGroupMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent groupChatIntent = new Intent(getApplicationContext(), All_Users_Activity.class);
@@ -69,7 +69,6 @@ public class Group_profile_activity extends AppCompatActivity {
                 startActivity(groupChatIntent);
             }
         });
-
         UpdateGroupSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -99,14 +98,11 @@ public class Group_profile_activity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(Group_profile_activity.this, "Profile Image uploaded Successfully...", Toast.LENGTH_SHORT).show();
-
                                 task.getResult().getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         final String downloadUrl = uri.toString();
-
                                         // your code to save the downloadUrl to the database
-
                                         RootRef.child("User").child(currentUserID).child("image")
                                                 .setValue(downloadUrl)
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -137,7 +133,9 @@ public class Group_profile_activity extends AppCompatActivity {
     private void UpdateSettings() {
         String setUserName = GroupName.getText().toString();
         String setStatus = groupDiscription.getText().toString();
+
         currentGroupName = setUserName;// Update currentGroupName with new group name
+
         if (TextUtils.isEmpty(setUserName)) {
             Toast.makeText(this, "Please write your user name first....", Toast.LENGTH_SHORT).show();
         }
@@ -163,8 +161,7 @@ public class Group_profile_activity extends AppCompatActivity {
                     });
         }
     }
-    private void RetrieveUserInfo()
-    {
+    private void RetrieveUserInfo() {
         RootRef.child("User").child(currentUserID)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -175,7 +172,6 @@ public class Group_profile_activity extends AppCompatActivity {
                             String retrieveUserName = dataSnapshot.child("name").getValue().toString();
                             String retrievesStatus = dataSnapshot.child("status").getValue().toString();
                             String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
-
                             GroupName.setText(retrieveUserName);
                             groupDiscription.setText(retrievesStatus);
                             Picasso.get().load(retrieveProfileImage).into(groupProfileImage);
