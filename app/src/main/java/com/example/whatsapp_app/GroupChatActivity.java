@@ -10,10 +10,12 @@ import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -21,11 +23,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
-
 public class GroupChatActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private ImageButton SendMessageButton;
@@ -84,14 +85,12 @@ public class GroupChatActivity extends AppCompatActivity {
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
             }
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
@@ -113,7 +112,7 @@ public class GroupChatActivity extends AppCompatActivity {
         UserRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     currentUserName = snapshot.child("name").getValue().toString();
                 }
             }
@@ -139,37 +138,45 @@ public class GroupChatActivity extends AppCompatActivity {
         HashMap<String , Object> groupMessageKey = new HashMap<>();
         GroupNameRef.updateChildren(groupMessageKey);
         GroupMessageKeyRef = GroupNameRef.child(messageKey);
-        HashMap<String , Object> messageInfomap = new HashMap<>();
-        messageInfomap.put("name",currentUserName);
-        messageInfomap.put("message",message);
-        messageInfomap.put("date",currentDate);
-        messageInfomap.put("time",currentTime);
-        GroupMessageKeyRef.updateChildren(messageInfomap);
+        HashMap<String , Object> messageInfoMap = new HashMap<>();
+        messageInfoMap.put("name",currentUserName);
+        messageInfoMap.put("message",message);
+        messageInfoMap.put("date",currentDate);
+        messageInfoMap.put("time",currentTime);
+        GroupMessageKeyRef.updateChildren(messageInfoMap);
     }
     }
 //    group massage
 private void DisplayMessage(DataSnapshot snapshot) {
 
-        Iterator iterator = snapshot.getChildren().iterator();
-
-    while (iterator.hasNext()) {
-        DataSnapshot childSnapshot = (DataSnapshot) iterator.next();
+    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
         Object value = childSnapshot.getValue();
-        if (value instanceof HashMap) {
-            HashMap<String, String> chatDataMap = (HashMap<String, String>) value;
-            String chatData = chatDataMap.get("chatData");
-            String chatMessage = chatDataMap.get("chatMessage");
-            String chatName = chatDataMap.get("chatName");
-            String chatTime = chatDataMap.get("chatTime");
-            displayTextMessage.append(chatName + ":\n" + chatMessage + ":\n" + chatTime + "   " + chatData + ":\n\n\n");
-        }
-        else if (value instanceof String) {
+        if (value instanceof String) {
             String chatData = (String) value;
             // Handle the case when the value is a string directly without a HashMap structure
             // You might want to adjust this part based on your specific data structure
             displayTextMessage.append(chatData + "\n");
-        }
+            }
         mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-    }
+        }
     }
 }
+
+
+
+//    private void DisplayMessage(DataSnapshot dataSnapshot)
+//    {
+//        Iterator iterator = dataSnapshot.getChildren().iterator();
+//
+//        while(iterator.hasNext())
+//        {
+//            String chatDate = (String) ((DataSnapshot)iterator.next()).getValue();
+//            String chatMessage = (String) ((DataSnapshot)iterator.next()).getValue();
+//            String chatName = (String) ((DataSnapshot)iterator.next()).getValue();
+//            String chatTime = (String) ((DataSnapshot)iterator.next()).getValue();
+//
+//            displayTextMessage.append(chatName + " :\n" + chatMessage + "\n" + chatTime + "     " + chatDate + "\n\n\n");
+//
+//            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+//        }
+//    }

@@ -59,14 +59,10 @@ public class All_Users_Activity extends AppCompatActivity {
 //                startActivity(new Intent(All_Users_Activity.this, GroupChatActivity.class));
 //            }
 //        });
-
-
-
         FirebaseRecyclerOptions<Contact> options =
                 new FirebaseRecyclerOptions.Builder<Contact>()
                         .setQuery(UsersRef, Contact.class)
                         .build();
-
         FirebaseRecyclerAdapter<Contact,UsersViewHolder> adapter =
                 new FirebaseRecyclerAdapter<Contact,UsersViewHolder>(options) {
                     @Override

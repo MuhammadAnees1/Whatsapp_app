@@ -265,7 +265,6 @@ import io.reactivex.rxjava3.annotations.NonNull;
             private void deleteMessageFormEveryone(final int position, final MessageViewHolder holder) {
                 DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
                 Messages message = userMessagesList.get(holder.getBindingAdapterPosition());
-
                 rootRef.child("Messages")
                         .child(message.getTo())
                         .child(message.getFrom())

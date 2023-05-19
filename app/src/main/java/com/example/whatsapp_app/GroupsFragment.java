@@ -24,14 +24,13 @@ public class GroupsFragment extends Fragment {
     private ArrayAdapter<String> arrayAdapter;
     ArrayList<String> list_of_groups = new ArrayList<>();
     private DatabaseReference GroupRef;
+
 //    private String currentUserID;
 //    private FirebaseAuth mAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-
-    {
+                             Bundle savedInstanceState) {
 //        mAuth = FirebaseAuth.getInstance();
 //        currentUserID = mAuth.getCurrentUser().getUid();
         groupFragmentView = inflater.inflate(R.layout.fragment_groups, container, false);
@@ -43,10 +42,10 @@ public class GroupsFragment extends Fragment {
 
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id){
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String currentGroupName = adapterView.getItemAtPosition(position).toString();
                 Intent groupChatIntent = new Intent(getContext(), GroupChatActivity.class);
-                groupChatIntent.putExtra("groupName" , currentGroupName);
+                groupChatIntent.putExtra("groupName", currentGroupName);
                 startActivity(groupChatIntent);
             }
         });

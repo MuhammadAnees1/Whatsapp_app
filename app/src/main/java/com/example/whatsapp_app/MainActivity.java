@@ -10,13 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
@@ -27,29 +25,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.HashMap;
-
-
 public class MainActivity extends AppCompatActivity {
     private ViewPager2 myViewPager;
     private TabLayout myTabLayout;
-
-    private TabsAccessorAdapter viewPagerAdapter;
-
-
+    TabsAccessorAdapter viewPagerAdapter;
     private FirebaseAuth mAuth;
     private DatabaseReference RootRef;
     private String currentUserID;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toast.makeText(MainActivity.this,"Welcome", Toast.LENGTH_SHORT).show();
-
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         RootRef = FirebaseDatabase.getInstance().getReference();
@@ -57,15 +45,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.main_page_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setTitle("Whatsapp");
-
-
         myViewPager = findViewById(R.id.main_tabs_pager);
         myTabLayout = findViewById(R.id.main_tabs);
-
-
         viewPagerAdapter = new TabsAccessorAdapter(this);
         myViewPager.setAdapter(viewPagerAdapter);
-
 //tabLayout
         myTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -77,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
 
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
@@ -92,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
     @Override
     protected void onStart()
     {
@@ -125,9 +105,6 @@ public class MainActivity extends AppCompatActivity {
             updateUserStatus("offline");
         }
     }
-
-
-
     @Override
     protected void onDestroy()
     {
@@ -139,9 +116,6 @@ public class MainActivity extends AppCompatActivity {
             updateUserStatus("offline");
         }
     }
-
-
-
     private void VerifyUserExistance()
     {
         String currentUserID = mAuth.getCurrentUser().getUid();
@@ -162,9 +136,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -174,8 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -202,15 +171,12 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
-
-
     private void RequestNewGroup()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialog);
         builder.setTitle("Enter Group Name :");
-
         final EditText groupNameField = new EditText(MainActivity.this);
-        groupNameField.setHint("e.g Nesh Tech");
+        groupNameField.setHint("e.g NesT Tech");
         builder.setView(groupNameField);
 
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
@@ -240,9 +206,6 @@ public class MainActivity extends AppCompatActivity {
 
         builder.show();
     }
-
-
-
     private void CreateNewGroup(final String groupName)
     {
         RootRef.child("Groups").child(groupName).setValue("")
@@ -257,9 +220,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
-
     private void SendUserToLoginActivity()
     {
         Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -267,34 +227,24 @@ public class MainActivity extends AppCompatActivity {
         startActivity(loginIntent);
 
     }
-
     private void SendUserToSettingsActivity()
     {
         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(settingsIntent);
     }
-
-
     private void SendUserToFindFriendsActivity()
     {
         Intent findFriendsIntent = new Intent(MainActivity.this, FindFriendsActivity.class);
         startActivity(findFriendsIntent);
     }
-
-
-
     private void updateUserStatus(String state)
     {
         String saveCurrentTime, saveCurrentDate;
-
         Calendar calendar = Calendar.getInstance();
-
         SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
         saveCurrentDate = currentDate.format(calendar.getTime());
-
         SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
         saveCurrentTime = currentTime.format(calendar.getTime());
-
         HashMap<String, Object> onlineStateMap = new HashMap<>();
         onlineStateMap.put("time", saveCurrentTime);
         onlineStateMap.put("date", saveCurrentDate);

@@ -120,7 +120,8 @@ public class Group_profile_activity extends AppCompatActivity {
                                                 });
                                     }
                                 });
-                            } else {
+                            }
+                            else {
                                 String message = task.getException().toString();
                                 Toast.makeText(Group_profile_activity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                             }
